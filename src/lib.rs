@@ -1,3 +1,12 @@
+// Copyright 2019 nblistener developers. See the COPYRIGHT
+// file at the top-level directory of this distribution.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
+
 //! # nblistener
 //! nblistener provides the [Listener](trait.Listener.html) trait to simplify
 //! interactions with [TcpListener](https://doc.rust-lang.org/nightly/std/net/struct.TcpListener.html).
@@ -30,7 +39,7 @@ use std::time::Duration;
 
 const EBADF: i32 = 9;
 
-/// Closeable Listener
+/// Listener which simplifies using TcpListener
 ///
 /// # Examples
 /// ```rust
