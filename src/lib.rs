@@ -30,14 +30,23 @@
 //! to support testing or low throughput usage.
 //!
 
-use libc;
 use std::io::{Error, ErrorKind};
 use std::net::{TcpListener, TcpStream, ToSocketAddrs};
-use std::os::unix::io::AsRawFd;
+#[cfg(windows)]
+mod plat_specifics {
+    pub use std::os::windows::io::AsRawSocket;
+    pub use ws2_32;
+    pub const EBADF: i32 = 10038;
+}
+#[cfg(not(windows))]
+mod plat_specifics {
+    pub use libc;
+    pub use std::os::unix::io::AsRawFd;
+    pub const EBADF: i32 = 9;
+}
+use plat_specifics::*;
 use std::thread;
 use std::time::Duration;
-
-const EBADF: i32 = 9;
 
 /// Listener which simplifies using TcpListener
 ///
@@ -112,6 +121,9 @@ impl Listener for TcpListener {
 
     fn close(&self) {
         unsafe {
+            #[cfg(windows)]
+            ws2_32::closesocket(self.as_raw_socket());
+            #[cfg(not(windows))]
             libc::close(self.as_raw_fd());
         }
     }
@@ -125,7 +137,7 @@ impl Listener for TcpListener {
                         thread::sleep(timeout);
                     } else {
                         if let Some(val) = err.raw_os_error() {
-                            if val == EBADF {
+                            if val == plat_specifics::EBADF {
                                 return Ok(());
                             }
                         }
