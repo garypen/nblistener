@@ -35,7 +35,7 @@ use std::net::{TcpListener, TcpStream, ToSocketAddrs};
 #[cfg(windows)]
 mod plat_specifics {
     pub use std::os::windows::io::AsRawSocket;
-    pub use ws2_32;
+    pub use winapi::um::winsock2;
     pub const EBADF: i32 = 10038;
 }
 #[cfg(not(windows))]
@@ -122,7 +122,7 @@ impl Listener for TcpListener {
     fn close(&self) {
         unsafe {
             #[cfg(windows)]
-            ws2_32::closesocket(self.as_raw_socket());
+            winsock2::closesocket(self.as_raw_socket() as usize);
             #[cfg(not(windows))]
             libc::close(self.as_raw_fd());
         }
