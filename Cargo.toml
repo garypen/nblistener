@@ -1,6 +1,6 @@
 [package]
 name = "nblistener"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["garypen <garypen@gmail.com>"]
 edition = "2018"
 description = "Provides a Listener trait to simplify interactions with std::net::TcpListener"
