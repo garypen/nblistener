@@ -18,5 +18,5 @@ readme = "README.md"
 libc = "0.2"
 
 [target.'cfg(windows)'.dependencies]
-ws2_32-sys = "0.2"
+winapi = { version = "0.3", features = ["winsock2"] }
 
